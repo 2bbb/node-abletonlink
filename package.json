@@ -1,0 +1,24 @@
+{
+  "name": "node-abletonlink",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "autogypi": "autogypi",
+    "node-gyp": "node-gyp",
+    "emcc-path": "emcc-path",
+    "copyasm": "copyasm",
+    "ndts": "ndts",
+    "init-submodule": "git submodule update --init --recursive",
+    "install": "npm build",
+    "build": "npm run init-submodule && node-gyp configure build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "autogypi": "^0.2.2",
+    "nbind": "^0.3.9",
+    "node-gyp": "^3.5.0"
+  }
+}
