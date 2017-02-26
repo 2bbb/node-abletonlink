@@ -40,7 +40,7 @@ npm install 2bbb/node-abletonlink --save
 
 ## how to use
 
-```nodejs
+```js
 const abletonlink = require('abletonlink');
 const link = new abletonlink();
 
