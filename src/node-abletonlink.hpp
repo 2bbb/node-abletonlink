@@ -1,9 +1,8 @@
-#include <ableton/Link.hpp>
-#include <iostream>
 #include <memory>
-#include <map>
 #include <queue>
 #include <mutex>
+
+#include <ableton/Link.hpp>
 
 #include "nbind/nbind.h"
 #include "nbind/api.h"
@@ -33,7 +32,6 @@ namespace bbb {
         double phase{0.0};
         double bpm{120.0};
         double quantum{4.0};
-        std::map<std::string, nbind::cbFunction> callbacks;
 
     public:
         AbletonLink(double bpm = 120.0, double quantum = 4.0, bool enable = true)
