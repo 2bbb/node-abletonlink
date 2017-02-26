@@ -9,9 +9,8 @@
     "emcc-path": "emcc-path",
     "copyasm": "copyasm",
     "ndts": "ndts",
-    "init-submodule": "git submodule update --init --recursive",
     "install": "npm run build",
-    "build": "npm run init-submodule && node-gyp configure build"
+    "build": "node-gyp configure build"
   },
   "keywords": [],
   "author": "",
