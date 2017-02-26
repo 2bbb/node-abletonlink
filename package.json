@@ -1,7 +1,7 @@
 {
   "name": "node-abletonlink",
   "version": "0.0.1",
-  "description": "",
+  "description": "ableton link for node.js",
   "main": "index.js",
   "scripts": {
     "autogypi": "autogypi",
