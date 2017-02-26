@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "ableton link for node.js",
   "main": "index.js",
+  "directories": {
+    "example": "./example"
+  },
   "scripts": {
     "node-gyp": "node-gyp",
     "ndts": "ndts",
@@ -10,6 +13,10 @@
     "build": "node-gyp configure build"
   },
   "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/2bbb/node-abletonlink"
+  },
   "author": "",
   "license": "MIT",
   "dependencies": {
