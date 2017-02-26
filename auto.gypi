@@ -3,6 +3,6 @@
     '<!(node -e "require(\'nan\')")'
   ],
   "includes": [
-    '../node_modules/nbind/src/nbind.gypi'
+    '../../node_modules/nbind/src/nbind.gypi'
   ]
 }
