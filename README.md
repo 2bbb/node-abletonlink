@@ -48,5 +48,4 @@ function do_something() {
     const bpm = link.bpm;
     ...
 }
-
 ```
