@@ -8,7 +8,6 @@ NBIND_CLASS(AbletonLink) {
     construct<double>();
     construct<double, double>();
     construct<double, double, bool>();
-    construct<AbletonLink *>();
 
     getset(getBeat, setBeat);
     method(setBeatForce);
@@ -19,7 +18,7 @@ NBIND_CLASS(AbletonLink) {
 
     method(getNumPeers);
 
-    getset(getBPM, setBPM);
+    getset(getBpm, setBpm);
     getset(getLinkEnable, setLinkEnable);
     method(enable);
     method(disable);

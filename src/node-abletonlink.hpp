@@ -34,7 +34,13 @@ namespace bbb {
         double quantum{4.0};
 
     public:
-        AbletonLink(double bpm = 120.0, double quantum = 4.0, bool enable = true)
+        AbletonLink()
+        : AbletonLink(120.0) {}
+        AbletonLink(double bpm)
+        : AbletonLink(bpm, 4.0) {}
+        AbletonLink(double bpm, double quantum)
+        : AbletonLink(bpm, quantum, true) {}
+        AbletonLink(double bpm, double quantum, bool enable)
         : link(bpm)
         , bpm(bpm)
         , quantum(quantum)
@@ -86,8 +92,8 @@ namespace bbb {
             // auto timeline = link.captureAppTimeline();
         }
         
-        double getBPM() const { return bpm; }
-        void setBPM(double bpm) {
+        double getBpm() const { return bpm; }
+        void setBpm(double bpm) {
             this->bpm = bpm;
             const auto time = link.clock().micros();
             auto timeline = link.captureAppTimeline();
