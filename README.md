@@ -29,12 +29,18 @@ see detail on [node-gyp](https://github.com/nodejs/node-gyp))
 ## install
 
 ```
+npm install abletonlink --save
+```
+
+or
+
+```
 npm install 2bbb/node-abletonlink --save
 ```
 
 ## how to use
 
-```
+```nodejs
 const abletonlink = require('abletonlink');
 const link = new abletonlink();
 
