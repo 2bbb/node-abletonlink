@@ -1,5 +1,5 @@
 {
-  "name": "node-abletonlink",
+  "name": "abletonlink",
   "version": "0.0.1",
   "description": "ableton link for node.js",
   "main": "index.js",
@@ -10,7 +10,7 @@
     "copyasm": "copyasm",
     "ndts": "ndts",
     "init-submodule": "git submodule update --init --recursive",
-    "install": "npm build",
+    "install": "npm run build",
     "build": "npm run init-submodule && node-gyp configure build"
   },
   "keywords": [],
