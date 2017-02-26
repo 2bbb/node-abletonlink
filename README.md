@@ -2,13 +2,9 @@
 
 node.js port of [ableton Link](https://github.com/ableton/link)
 
-## install
-
-```
-npm install 2bbb/node-abletonlink --save
-```
-
 ## require env
+
+see detail on [node-gyp](https://github.com/nodejs/node-gyp))
 
 * python v2.7
 
@@ -25,7 +21,16 @@ npm install 2bbb/node-abletonlink --save
 * Microsoft windows-build-tools (`npm install --global --production windows-build-tools`)
 * Visual C++
 
-(see [node-gyp](https://github.com/nodejs/node-gyp))
+## tested
+
+* OSX 10.10〜10.12 with Xcode
+* node.js 6.x
+
+## install
+
+```
+npm install 2bbb/node-abletonlink --save
+```
 
 ## how to use
 
