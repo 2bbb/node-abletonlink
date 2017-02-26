@@ -1,8 +1,8 @@
 {
   "include_dirs": [
-    "./node_modules/nan"
+    '<!(node -e "require(\'nan\')")'
   ],
   "includes": [
-    "./node_modules/nbind/src/nbind.gypi"
+    '<!(node -e "console.log(require(\'path\').join(require(\'module\')._resolveLookupPaths(\'nbind\'), \'src\', \'nbind.gypi\'))")'
   ]
 }

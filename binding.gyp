@@ -10,8 +10,8 @@
 		'include_dirs': [
 			'./libs/link/include',
 			'./libs/link/modules/asio-standalone/asio/include',
-			'./node_modules/nbind/include',
-			'./node_modules/nan'
+			'<!(node -e "console.log(require(\'path\').join(require(\'module\')._resolveLookupPaths(\'nbind\'), \'include\'))")',
+			'<!(node -e "require(\'nan\')")'
 		],
 		'conditions': [
 			['OS=="mac"', {
