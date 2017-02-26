@@ -10,7 +10,7 @@
     "node-gyp": "node-gyp",
     "ndts": "ndts",
     "install": "npm run build",
-    "build": "node-gyp configure build"
+    "build": "autogypi && node-gyp rebuild"
   },
   "keywords": [],
   "repository": {
