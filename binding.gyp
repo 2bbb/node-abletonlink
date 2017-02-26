@@ -9,9 +9,9 @@
 		],
 		'include_dirs': [
 			'./libs/link/include',
-			'libs/link/modules/asio-standalone/asio/include',
-			'node_modules/nbind/include',
-			'node_modules/nan'
+			'./libs/link/modules/asio-standalone/asio/include',
+			'./node_modules/nbind/include',
+			'./node_modules/nan'
 		],
 		'conditions': [
 			['OS=="mac"', {
