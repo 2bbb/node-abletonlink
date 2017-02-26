@@ -19,12 +19,12 @@ NBIND_CLASS(AbletonLink) {
 
     method(getNumPeers);
 
-    method(update);
-
     getset(getBPM, setBPM);
     getset(getLinkEnable, setLinkEnable);
     method(enable);
     method(disable);
+
+    method(update);
 
     method(onTempoChanged);
     method(onNumPeersChanged);

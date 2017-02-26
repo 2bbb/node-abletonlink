@@ -2,11 +2,31 @@
 #include <iostream>
 #include <memory>
 #include <map>
+#include <queue>
+#include <mutex>
 
 #include "nbind/nbind.h"
 #include "nbind/api.h"
+#include <node.h>
 
 namespace bbb {
+    class AbletonLink;
+
+    struct ALTempoQueue {
+        AbletonLink *that;
+        double bpm;
+    };
+    struct ALNumPeersQueue {
+        AbletonLink *that;
+        std::size_t numPeers;
+    };
+
+    static uv_async_t async;
+    static std::mutex bbb_mutex;
+    static std::queue<ALTempoQueue> bbb_tempo_queue;
+    static std::queue<ALNumPeersQueue> bbb_peers_queue;
+    static void bbb_async_cb_handler(uv_async_t *handle);
+
     class AbletonLink {
         ableton::Link link;
         double beat{0.0};
@@ -20,8 +40,25 @@ namespace bbb {
         : link(bpm)
         , bpm(bpm)
         , quantum(quantum)
+        , tempoCallback(nullptr)
+        , numPeersCallback(nullptr)
         {
+            static bool b{true};
+            if(b) {
+                uv_async_init(uv_default_loop(), &async, bbb_async_cb_handler);
+                b = false;
+            }
             link.enable(enable);
+            link.setTempoCallback([this](double bpm) {
+                std::lock_guard<std::mutex> lock(bbb_mutex);
+                bbb_tempo_queue.push({this, bpm});
+                uv_async_send(&async);
+            });
+            link.setNumPeersCallback([this](std::size_t num) {
+                std::lock_guard<std::mutex> lock(bbb_mutex);
+                bbb_peers_queue.push({this, num});
+                uv_async_send(&async);
+            });
         };
         explicit AbletonLink(const AbletonLink *other)
         : AbletonLink(other->bpm, other->quantum, other->getLinkEnable()) {}
@@ -73,20 +110,38 @@ namespace bbb {
         }
         void on(std::string key, nbind::cbFunction &callback) {
             if(key == "tempo") {
-                if(tempoCallback) delete tempoCallback;
-                tempoCallback = new nbind::cbFunction(callback);
-                link.setTempoCallback([this](double bpm) {
-                    if(tempoCallback) tempoCallback->call<void>(bpm);
-                });
+                tempoCallback = std::make_shared<nbind::cbFunction>(callback);
+            } else if(key == "numPeers") {
+                numPeersCallback = std::make_shared<nbind::cbFunction>(callback);
             }
         }
 
         void off(std::string key) {
-            if(key == "tempo") link.setTempoCallback([](double) {});
-            else if(key == "numPeers") link.setNumPeersCallback([](std::size_t) {});
+            if(key == "tempo") {
+                tempoCallback.reset();
+            } else if(key == "numPeers") {
+                numPeersCallback.reset();
+            }
         }
+        
     public:
-        nbind::cbFunction *tempoCallback{nullptr};
+        void tempoChanged(double tempo) {
+            if(tempoCallback) {
+                Nan::HandleScope scope;
+                (*tempoCallback)(tempo);
+            }
+        }
+
+        void numPeersChanged(std::size_t num) {
+            if(numPeersCallback) {
+                Nan::HandleScope scope;
+                (*numPeersCallback)(num);
+            }
+        }
+
+        std::shared_ptr<nbind::cbFunction> tempoCallback;
+        std::shared_ptr<nbind::cbFunction> numPeersCallback;
+
         void update() {
             const auto time = link.clock().micros();
             auto timeline = link.captureAppTimeline();
@@ -96,4 +151,18 @@ namespace bbb {
             bpm = timeline.tempo();
         };
     };
+
+    static void bbb_async_cb_handler(uv_async_t *handle) {
+        std::lock_guard<std::mutex> sl(bbb_mutex);
+        while(!bbb_tempo_queue.empty()) {
+            auto &front = bbb_tempo_queue.front();
+            front.that->tempoChanged(front.bpm);
+            bbb_tempo_queue.pop();
+        }
+        while(!bbb_peers_queue.empty()) {
+            auto &front = bbb_peers_queue.front();
+            front.that->numPeersChanged(front.numPeers);
+            bbb_peers_queue.pop();
+        }
+    }
 };
