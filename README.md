@@ -49,7 +49,7 @@ link.startUpdate(60, (beat, phase, bpm) => {
 });
 
 function do_something() {
-    const bpm = link.bpm;
+    const beat = link.beat;
     const phase = link.phase;
     const bpm = link.bpm;
     ...
