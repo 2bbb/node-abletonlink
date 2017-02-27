@@ -69,6 +69,10 @@ function do_something() {
 }
 ```
 
+## Example
+
+* [node-abletonlink-example](https://github.com/2bbb/node-abletonlink-example)
+
 ## API
 
 ## property
