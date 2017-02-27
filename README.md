@@ -11,7 +11,7 @@ node.js port of [ableton Link](https://github.com/ableton/link) with [nbind](htt
 
 ## Required
 
-see detail on [node-gyp](https://github.com/nodejs/node-gyp))
+see detail on [node-gyp](https://github.com/nodejs/node-gyp)
 
 ### Common
 
@@ -92,8 +92,9 @@ set beat force.
 
 set callback will call change event.
 
-    * `key` is `'tempo'` then argument of callback is new `tempo`.
-    * `key` is `'numPeers'` then argument of callback is new `numPeers`.
+`key` is `'tempo'` then argument of callback is new `tempo`.
+
+`key` is `'numPeers'` then argument of callback is new `numPeers`.
 
 * `off` : `(key: string) -> void`
 
