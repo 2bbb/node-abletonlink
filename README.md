@@ -1,10 +1,19 @@
 # node-abletonlink
 
-node.js port of [ableton Link](https://github.com/ableton/link)
+node.js port of [ableton Link](https://github.com/ableton/link) with [nbind](https://github.com/charto/nbind)
 
-## require env
+## Dependencies
+
+* [ableton/link](https://github.com/ableton/link)
+    * [chriskohlhoff/asio](https://github.com/chriskohlhoff/asio)
+    * [philsquared/Catch](https://github.com/philsquared/Catch)
+* [charto/nbind](https://github.com/charto/nbind)
+
+## Required
 
 see detail on [node-gyp](https://github.com/nodejs/node-gyp))
+
+### Common
 
 * python v2.7
 
@@ -20,13 +29,14 @@ see detail on [node-gyp](https://github.com/nodejs/node-gyp))
 
 * Microsoft windows-build-tools (`npm install --global --production windows-build-tools`)
 * Visual C++
+* *I don't know Windows!!*
 
-## tested
+## Tested env
 
 * OSX 10.10〜10.12 with Xcode
 * node.js 6.x
 
-## install
+## Install
 
 ```
 npm install abletonlink --save
@@ -38,7 +48,7 @@ or
 npm install 2bbb/node-abletonlink --save
 ```
 
-## how to use
+## How to use
 
 ```js
 const abletonlink = require('abletonlink');
@@ -48,6 +58,9 @@ link.startUpdate(60, (beat, phase, bpm) => {
     console.log("updated: ", beat, phase, bpm);
 });
 
+// callback is option.
+// link.startUpdate(60); // correct!
+
 function do_something() {
     const beat = link.beat;
     const phase = link.phase;
@@ -55,3 +68,59 @@ function do_something() {
     ...
 }
 ```
+
+## API
+
+## property
+
+* `beat`: `number`
+* `bpm`: `number`
+* `phase`: `number`
+* `quantum`: `number`
+
+## method
+
+* `getNumPeers`: `(void) -> number`
+
+get num peers.
+
+* `setBeatForce`: `(beat: number) -> void`
+
+set beat force.
+
+* `on`: `(key: string, callback: (number) -> void) -> void`
+
+set callback will call change event.
+
+    * `key` is `'tempo'` then argument of callback is new `tempo`.
+    * `key` is `'numPeers'` then argument of callback is new `numPeers`.
+
+* `off` : `(key: string) -> void`
+
+remove callback.
+
+* `enable`: `(void) -> void`
+* `disable`: `(void) -> void`
+
+* `update`: `(void) -> void`
+
+call update manually.
+
+* `startUpdate`: `(interval: number [, callback: (beat:number, phase:number, bpm:number) -> void]) -> void`
+
+start update timer with interval.
+
+if given callback, it will call every interval with arguments `beat`, `phase`, `bpm`.
+
+* `stopUpdate`: `(void) -> void`
+
+stop update timer.
+
+## License
+
+MIT
+
+## Author
+
+* ISHII 2bit [bufferRenaiss co., ltd.]
+* ishii[at]buffer-renaiss.com
