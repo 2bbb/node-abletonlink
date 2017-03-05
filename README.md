@@ -34,7 +34,12 @@ see detail on [node-gyp](https://github.com/nodejs/node-gyp)
 ## Tested env
 
 * OSX 10.10〜10.12 with Xcode
-* node.js 6.x
+   * node.js 6.x
+* Ubuntu 16.04 (on docker) with gcc 4.9.4
+   * node.js 7.0.0
+* Fedora 25 (on docker) with gcc 6.2.1
+   * node.js 7.0.0
+      * but it will get **stack** [#1]
 
 ## Install
 
