@@ -39,7 +39,7 @@ see detail on [node-gyp](https://github.com/nodejs/node-gyp)
    * node.js 7.0.0
 * Fedora 25 (on docker) with gcc 6.2.1
    * node.js 7.0.0
-      * but it will get **stack** [#1]
+      * but it will get **stack** [ #1 ]
 
 ## Install
 
