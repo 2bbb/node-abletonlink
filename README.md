@@ -37,7 +37,7 @@ see detail on [node-gyp](https://github.com/nodejs/node-gyp)
 * Ubuntu 16.04 (on docker) with gcc 4.9.4 / node.js 7.0.0
 * Ubuntu 16.04 (on docker) with gcc 6.2.0 / node.js 7.0.0
 * Fedora 25 (on docker) with gcc 6.2.1 / node.js 7.0.0
-      * but it will get **stack** [#1](#1)
+      * but it will get **stack** [#1](issue#1)
 
 ## Install
 
