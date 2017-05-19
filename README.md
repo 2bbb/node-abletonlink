@@ -132,3 +132,9 @@ MIT
 
 * ISHII 2bit [bufferRenaiss co., ltd.]
 * ishii[at]buffer-renaiss.com
+
+## At last
+
+If you get happy with using this addon, and you're rich, please donation for support continuous development.
+
+Bitcoin: `386iAzZ7m99sMyUQjM7TrZg1Uft518zpgv`
