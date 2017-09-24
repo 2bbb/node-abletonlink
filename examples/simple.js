@@ -8,6 +8,8 @@ link.on('numPeers', (numPeers) => console.log("numPeers", numPeers));
 link.startUpdate(16, (beat, phase, bpm) => console.log("updated", beat, phase, bpm));
 // or link.startUpdate(60);
 
+link.enable();
+
 setInterval(() => {
     link.bpm = link.bpm + 1;
 }, 3000);
