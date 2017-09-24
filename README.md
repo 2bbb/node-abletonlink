@@ -133,6 +133,10 @@ MIT
 * ISHII 2bit [bufferRenaiss co., ltd.]
 * ishii[at]buffer-renaiss.com
 
+## Special Thanks
+
+* [hlolli](https://github.com/hlolli)
+
 ## At last
 
 If you get happy with using this addon, and you're rich, please donation for support continuous development.
