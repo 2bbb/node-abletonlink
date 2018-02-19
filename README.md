@@ -28,16 +28,16 @@ see detail on [node-gyp](https://github.com/nodejs/node-gyp)
 ### Windows
 
 * Microsoft windows-build-tools (`npm install --global --production windows-build-tools`)
-* Visual C++
-* *I don't know Windows!!*
+* if you install version of MSVS isn't 2015, `npm config set msvs_version 2015` before install this package.
 
 ## Tested env
 
-* OSX 10.10〜10.12 with Xcode / node.js 6.x
+* OSX 10.10〜10.12 with Xcode / node.js 6.x, 8.9.4
 * Ubuntu 16.04 (on docker) with gcc 4.9.4 / node.js 7.0.0
 * Ubuntu 16.04 (on docker) with gcc 6.2.0 / node.js 7.0.0
 * Fedora 25 (on docker) with gcc 6.2.1 / node.js 7.0.0
       * but it will get **stack** [issue#1](https://github.com/2bbb/node-abletonlink/issues/1)
+* Windows 10 with windows-build-tools / node.js 8.9.4
 
 ## Install
 
