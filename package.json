@@ -1,6 +1,6 @@
 {
   "name": "abletonlink",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "ableton link for node.js",
   "main": "index.js",
   "directories": {
@@ -10,7 +10,7 @@
     "node-gyp": "node-gyp",
     "ndts": "ndts",
     "install": "npm run build",
-    "build": "autogypi && node-gyp rebuild"
+    "build": "npm config set msvs_version 2015 && autogypi && node-gyp rebuild"
   },
   "keywords": [],
   "repository": {
