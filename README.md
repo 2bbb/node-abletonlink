@@ -37,7 +37,7 @@ see detail on [node-gyp](https://github.com/nodejs/node-gyp)
 * Ubuntu 16.04 (on docker) with gcc 6.2.0 / node.js 7.0.0
 * Fedora 25 (on docker) with gcc 6.2.1 / node.js 7.0.0
       * but it will get **stack** [issue#1](https://github.com/2bbb/node-abletonlink/issues/1)
-* Windows 10 with windows-build-tools / node.js 8.9.4
+* Windows 10 with windows-build-tools / node.js 6.13.0, 8.9.4
 
 ## Install
 
