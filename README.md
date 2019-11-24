@@ -78,6 +78,9 @@ function do_something() {
 
 ## API
 
+`const abletonlink = require('abletonlink')`: Thread Safe
+`abletonlink.Audio`: Not Thread Safe (but on node.js/V8...??)
+
 ## property
 
 * `isLinkEnable`: `bool` [get/set]
