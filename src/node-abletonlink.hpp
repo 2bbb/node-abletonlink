@@ -84,10 +84,11 @@ namespace bbb {
         explicit AbletonLink(const AbletonLink *other)
         : AbletonLink(other->bpm, other->quantum, other->getLinkEnable()) {}
 
-        bool getLinkEnable() const { return link.isEnabled(); }
-        void setLinkEnable(bool enable) { link.enable(enable); }
-        void enable() { link.enable(true); }
-        void disable() { link.enable(false); }
+        inline bool getLinkEnable() const { return link.isEnabled(); }
+        inline void setLinkEnable(bool enable) { link.enable(enable); }
+        inline void enable() { link.enable(true); }
+        inline void disable() { link.enable(false); }
+        
         inline bool getIsPlayStateSync() const { return link.isStartStopSyncEnabled(); }
         inline void setIsPlayStateSync(bool bEnable) { link.enableStartStopSync(bEnable); };
         inline void enablePlayStateSync() { link.enableStartStopSync(true); };
@@ -105,11 +106,11 @@ namespace bbb {
             sessionState->forceBeatAtTime(beat, time, quantum);
         }
         
-        double getPhase() const { return phase; }
+        inline double getPhase() const { return phase; }
         void setPhase(double phase) {
         }
         
-        double getBpm() const { return bpm; }
+        inline double getBpm() const { return bpm; }
         void setBpm(double bpm) {
             this->bpm = bpm;
             const auto &&time = get_time();
@@ -117,38 +118,36 @@ namespace bbb {
             sessionState->setTempo(bpm, time);
         }
         
-        bool getIsPlaying() const {
-            auto &&sessionState = link.captureAppSessionState();
-            return sessionState.isPlaying();
-        }
-        void setIsPlaying(bool isPlaying) {
+        inline bool getIsPlaying() const
+        { return link.captureAppSessionState().isPlaying(); };
+        inline void setIsPlaying(bool isPlaying) {
             const auto &&time = get_time();
             auto &&sessionState = get_session_state();
             sessionState->setIsPlaying(isPlaying, time);
         }
-        void play() {
+        inline void play() {
             const auto &&time = get_time();
             auto &&sessionState = get_session_state();
             sessionState->setIsPlaying(true, time);
         }
-        void stop() {
+        inline void stop() {
             const auto &&time = get_time();
             auto &&sessionState = get_session_state();
             sessionState->setIsPlaying(false, time);
         }
 
-        std::size_t getNumPeers() const { return link.numPeers(); }
+        inline std::size_t getNumPeers() const { return link.numPeers(); }
         
-        void setQuantum(double quantum) { this->quantum = quantum; }
-        double getQuantum() const { return quantum; }
+        inline void setQuantum(double quantum) { this->quantum = quantum; }
+        inline double getQuantum() const { return quantum; }
         
-        void onTempoChanged(nbind::cbFunction &callback) {
+        inline void onTempoChanged(nbind::cbFunction &callback) {
             on("tempo", callback);
         }
-        void onNumPeersChanged(nbind::cbFunction &callback) {
+        inline void onNumPeersChanged(nbind::cbFunction &callback) {
             on("numPeers", callback);
         }
-        void onPlayStateChanged(nbind::cbFunction &callback) {
+        inline void onPlayStateChanged(nbind::cbFunction &callback) {
             on("playState", callback);
         }
         void on(std::string key, nbind::cbFunction &callback) {
@@ -171,21 +170,21 @@ namespace bbb {
             }
         }
         
-        void tempoChanged(double tempo) {
+        inline void tempoChanged(double tempo) {
             if(tempoCallback) {
                 Nan::HandleScope scope;
                 (*tempoCallback)(tempo);
             }
         }
 
-        void numPeersChanged(std::size_t num) {
+        inline void numPeersChanged(std::size_t num) {
             if(numPeersCallback) {
                 Nan::HandleScope scope;
                 (*numPeersCallback)(num);
             }
         }
 
-        void playStateChanged(bool isPlaying) {
+        inline void playStateChanged(bool isPlaying) {
             if(playStateCallback) {
                 Nan::HandleScope scope;
                 (*playStateCallback)(isPlaying);
