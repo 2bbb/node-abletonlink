@@ -58,6 +58,7 @@ NBIND_CLASS(AbletonLinkAudio) {
     method(play);
     method(stop);
 
+    getter(getNumPeers);
     method(getNumPeers);
 
     getset(getBpm, setBpm);
