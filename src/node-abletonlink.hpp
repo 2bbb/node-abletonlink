@@ -15,29 +15,60 @@
 #include <node.h>
 
 namespace bbb {
-    class AbletonLink;
-
-    struct ALTempoQueue {
-        AbletonLink *that;
-        double bpm;
-    };
-    struct ALNumPeersQueue {
-        AbletonLink *that;
-        std::size_t numPeers;
-    };
-    struct ALPlayingQueue {
-        AbletonLink *that;
-        bool isPlaying;
-    };
-
-    static uv_async_t async;
-    static std::mutex bbb_mutex;
-    static std::queue<ALTempoQueue> bbb_tempo_queue;
-    static std::queue<ALNumPeersQueue> bbb_peers_queue;
-    static std::queue<ALPlayingQueue> bbb_is_playing_queue;
-    static void bbb_async_cb_handler(uv_async_t *handle);
-
+    template <bool is_audio_thread>
     class AbletonLink {
+        struct ALTempoQueue {
+            AbletonLink *that;
+            double bpm;
+        };
+        struct ALNumPeersQueue {
+            AbletonLink *that;
+            std::size_t numPeers;
+        };
+        struct ALPlayingQueue {
+            AbletonLink *that;
+            bool isPlaying;
+        };
+
+        inline static uv_async_t &async() {
+            static uv_async_t _;
+            return _;
+        };
+        inline static std::mutex &bbb_mutex() {
+            static std::mutex _;
+            return _;
+        }
+        inline static std::queue<ALTempoQueue> &bbb_tempo_queue() {
+            static std::queue<ALTempoQueue> _;
+            return _;
+        }
+        static std::queue<ALNumPeersQueue> &bbb_peers_queue() {
+            static std::queue<ALNumPeersQueue> _;
+            return _;
+        }
+        static std::queue<ALPlayingQueue> &bbb_is_playing_queue() {
+            static std::queue<ALPlayingQueue> _;
+            return _;
+        }
+        static void bbb_async_cb_handler(uv_async_t *handle) {
+            std::lock_guard<std::mutex> sl(bbb_mutex());
+            while(!bbb_tempo_queue().empty()) {
+                auto &front = bbb_tempo_queue().front();
+                front.that->tempoChanged(front.bpm);
+                bbb_tempo_queue().pop();
+            }
+            while(!bbb_peers_queue().empty()) {
+                auto &front = bbb_peers_queue().front();
+                front.that->numPeersChanged(front.numPeers);
+                bbb_peers_queue().pop();
+            }
+            while(!bbb_is_playing_queue().empty()) {
+                auto &front = bbb_is_playing_queue().front();
+                front.that->playStateChanged(front.isPlaying);
+                bbb_is_playing_queue().pop();
+            }
+        }
+
         ableton::Link link;
         double beat{0.0};
         double phase{0.0};
@@ -61,24 +92,24 @@ namespace bbb {
         {
             static bool b{true};
             if(b) {
-                uv_async_init(uv_default_loop(), &async, bbb_async_cb_handler);
+                uv_async_init(uv_default_loop(), &async(), bbb_async_cb_handler);
                 b = false;
             }
             link.enable(enable);
             link.setTempoCallback([this](double bpm) {
-                std::lock_guard<std::mutex> lock(bbb_mutex);
-                bbb_tempo_queue.push({this, bpm});
-                uv_async_send(&async);
+                std::lock_guard<std::mutex> lock(bbb_mutex());
+                bbb_tempo_queue().push({this, bpm});
+                uv_async_send(&async());
             });
             link.setNumPeersCallback([this](std::size_t num) {
-                std::lock_guard<std::mutex> lock(bbb_mutex);
-                bbb_peers_queue.push({this, num});
-                uv_async_send(&async);
+                std::lock_guard<std::mutex> lock(bbb_mutex());
+                bbb_peers_queue().push({this, num});
+                uv_async_send(&async());
             });
             link.setStartStopCallback([this](bool isPlaying) {
-                std::lock_guard<std::mutex> lock(bbb_mutex);
-                bbb_is_playing_queue.push({this, isPlaying});
-                uv_async_send(&async);
+                std::lock_guard<std::mutex> lock(bbb_mutex());
+                bbb_is_playing_queue().push({this, isPlaying});
+                uv_async_send(&async());
             });
         };
         explicit AbletonLink(const AbletonLink *other)
@@ -108,6 +139,10 @@ namespace bbb {
         
         inline double getPhase() const { return phase; }
         void setPhase(double phase) {
+            this->phase = phase;
+            const auto &&time = get_time();
+            auto &&sessionState = get_session_state();
+            sessionState->phaseAtTime(phase, time);
         }
         
         inline double getBpm() const { return bpm; }
@@ -213,10 +248,16 @@ namespace bbb {
             scoped_session_state() = delete;
             scoped_session_state(ableton::Link &link)
             : link(link)
-            , sessionState(link.captureAppSessionState())
+            , sessionState(is_audio_thread ? link.captureAudioSessionState() : link.captureAppSessionState())
             {}
             ~scoped_session_state()
-            { link.commitAppSessionState(sessionState); };
+            {
+                if(is_audio_thread) {
+                    link.commitAppSessionState(sessionState);
+                } else {
+                    link.commitAudioSessionState(sessionState);
+                }
+            };
 
             ableton::Link &link;
             ableton::Link::SessionState sessionState;
@@ -228,23 +269,4 @@ namespace bbb {
         inline scoped_session_state get_session_state()
         { return { link }; };
     };
-
-    static void bbb_async_cb_handler(uv_async_t *handle) {
-        std::lock_guard<std::mutex> sl(bbb_mutex);
-        while(!bbb_tempo_queue.empty()) {
-            auto &front = bbb_tempo_queue.front();
-            front.that->tempoChanged(front.bpm);
-            bbb_tempo_queue.pop();
-        }
-        while(!bbb_peers_queue.empty()) {
-            auto &front = bbb_peers_queue.front();
-            front.that->numPeersChanged(front.numPeers);
-            bbb_peers_queue.pop();
-        }
-        while(!bbb_is_playing_queue.empty()) {
-            auto &front = bbb_is_playing_queue.front();
-            front.that->playStateChanged(front.isPlaying);
-            bbb_is_playing_queue.pop();
-        }
-    }
 };
