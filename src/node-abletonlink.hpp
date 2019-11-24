@@ -136,7 +136,7 @@ namespace bbb {
             auto &&sessionState = get_session_state();
             sessionState->forceBeatAtTime(beat, time, quantum);
         }
-        
+
         inline double getPhase() const { return phase; }
         
         inline double getBpm() const { return bpm; }
@@ -171,21 +171,21 @@ namespace bbb {
         inline double getQuantum() const { return quantum; }
         
         inline void onTempoChanged(nbind::cbFunction &callback) {
-            on("tempo", callback);
+            tempoCallback = std::make_shared<nbind::cbFunction>(callback);
         }
         inline void onNumPeersChanged(nbind::cbFunction &callback) {
-            on("numPeers", callback);
+            numPeersCallback = std::make_shared<nbind::cbFunction>(callback);
         }
         inline void onPlayStateChanged(nbind::cbFunction &callback) {
-            on("playState", callback);
+            playStateCallback = std::make_shared<nbind::cbFunction>(callback);
         }
         void on(std::string key, nbind::cbFunction &callback) {
             if(key == "tempo") {
-                tempoCallback = std::make_shared<nbind::cbFunction>(callback);
+                onTempoChanged(callback);
             } else if(key == "numPeers") {
-                numPeersCallback = std::make_shared<nbind::cbFunction>(callback);
+                onNumPeersChanged(callback);
             } else if(key == "playState") {
-                playStateCallback = std::make_shared<nbind::cbFunction>(callback);
+                onPlayStateChanged(callback);
             }
          }
 
