@@ -138,12 +138,6 @@ namespace bbb {
         }
         
         inline double getPhase() const { return phase; }
-        void setPhase(double phase) {
-            this->phase = phase;
-            const auto &&time = get_time();
-            auto &&sessionState = get_session_state();
-            sessionState->phaseAtTime(phase, time);
-        }
         
         inline double getBpm() const { return bpm; }
         void setBpm(double bpm) {

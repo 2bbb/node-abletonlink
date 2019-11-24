@@ -13,7 +13,7 @@ NBIND_CLASS(AbletonLink) {
     getset(getBeat, setBeat);
     method(setBeatForce);
 
-    getset(getPhase, setPhase);
+    getter(getPhase);
 
     getset(getQuantum, setQuantum);
 
@@ -50,7 +50,7 @@ NBIND_CLASS(AbletonLinkAudio) {
     getset(getBeat, setBeat);
     method(setBeatForce);
 
-    getset(getPhase, setPhase);
+    getter(getPhase);
 
     getset(getQuantum, setQuantum);
 
