@@ -88,6 +88,10 @@ namespace bbb {
         void setLinkEnable(bool enable) { link.enable(enable); }
         void enable() { link.enable(true); }
         void disable() { link.enable(false); }
+        inline bool getIsPlayStateSync() const { return link.isStartStopSyncEnabled(); }
+        inline void setIsPlayStateSync(bool bEnable) { link.enableStartStopSync(bEnable); };
+        inline void enablePlayStateSync() { link.enableStartStopSync(true); };
+        inline void disablePlayStateSync() { link.enableStartStopSync(false); };
         
         double getBeat() const { return beat; }
         void setBeat(double beat) {

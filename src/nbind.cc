@@ -19,7 +19,7 @@ NBIND_CLASS(AbletonLink) {
     getset(getIsPlaying, setIsPlaying);
     method(play);
     method(stop);
-    
+
     method(getNumPeers);
 
     getset(getBpm, setBpm);
@@ -27,6 +27,10 @@ NBIND_CLASS(AbletonLink) {
     method(enable);
     method(disable);
 
+    getset(getIsPlayStateSync, setIsPlayStateSync);
+    method(enablePlayStateSync);
+    method(disablePlayStateSync);
+    
     method(update);
 
     method(onTempoChanged);
