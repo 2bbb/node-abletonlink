@@ -43,6 +43,7 @@ namespace bbb {
         double phase{0.0};
         double bpm{120.0};
         double quantum{4.0};
+        bool isPlayingWhenUpdate{false};
 
     public:
         AbletonLink()
@@ -90,16 +91,14 @@ namespace bbb {
         
         double getBeat() const { return beat; }
         void setBeat(double beat) {
-            const auto time = link.clock().micros();
-            auto &&sessionState = link.captureAppSessionState();
-            sessionState.requestBeatAtTime(beat, time, quantum);
-            link.commitAppSessionState(sessionState);
+            const auto time = get_time();
+            auto &&sessionState = get_session_state();
+            sessionState->requestBeatAtTime(beat, time, quantum);
         }
         void setBeatForce(double beat) {
-            const auto &&time = link.clock().micros();
-            auto &&sessionState = link.captureAppSessionState();
-            sessionState.forceBeatAtTime(beat, time, quantum);
-            link.commitAppSessionState(sessionState);
+            const auto &&time = get_time();
+            auto &&sessionState = get_session_state();
+            sessionState->forceBeatAtTime(beat, time, quantum);
         }
         
         double getPhase() const { return phase; }
@@ -109,10 +108,9 @@ namespace bbb {
         double getBpm() const { return bpm; }
         void setBpm(double bpm) {
             this->bpm = bpm;
-            const auto &&time = link.clock().micros();
-            auto &&sessionState = link.captureAppSessionState();
-            sessionState.setTempo(bpm, time);
-            link.commitAppSessionState(sessionState);
+            const auto &&time = get_time();
+            auto &&sessionState = get_session_state();
+            sessionState->setTempo(bpm, time);
         }
         
         bool getIsPlaying() const {
@@ -120,9 +118,19 @@ namespace bbb {
             return sessionState.isPlaying();
         }
         void setIsPlaying(bool isPlaying) {
-            const auto &&time = link.clock().micros();
-            auto &&sessionState = link.captureAppSessionState();
-            sessionState.setIsPlaying(isPlaying, time);
+            const auto &&time = get_time();
+            auto &&sessionState = get_session_state();
+            sessionState->setIsPlaying(isPlaying, time);
+        }
+        void play() {
+            const auto &&time = get_time();
+            auto &&sessionState = get_session_state();
+            sessionState->setIsPlaying(true, time);
+        }
+        void stop() {
+            const auto &&time = get_time();
+            auto &&sessionState = get_session_state();
+            sessionState->setIsPlaying(false, time);
         }
 
         std::size_t getNumPeers() const { return link.numPeers(); }
@@ -191,7 +199,31 @@ namespace bbb {
             beat = sessionState.beatAtTime(time, quantum);
             phase = sessionState.phaseAtTime(time, quantum);
             bpm = sessionState.tempo();
+            isPlayingWhenUpdate = sessionState.isPlaying();
         };
+
+    private:
+        inline std::chrono::microseconds get_time() const
+        { return link.clock().micros(); }
+
+        struct scoped_session_state {
+            scoped_session_state() = delete;
+            scoped_session_state(ableton::Link &link)
+            : link(link)
+            , sessionState(link.captureAppSessionState())
+            {}
+            ~scoped_session_state()
+            { link.commitAppSessionState(sessionState); };
+
+            ableton::Link &link;
+            ableton::Link::SessionState sessionState;
+            inline ableton::Link::SessionState *operator->()
+            { return &sessionState; };
+            inline const ableton::Link::SessionState *operator->() const
+            { return &sessionState; };
+        };
+        inline scoped_session_state get_session_state()
+        { return { link }; };
     };
 
     static void bbb_async_cb_handler(uv_async_t *handle) {

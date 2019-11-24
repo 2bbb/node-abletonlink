@@ -7,9 +7,9 @@ lib.AbletonLink.prototype.startUpdate = function(interval_ms, callback) {
     if(callback) {
         this.timer = setInterval(() => {
             this.update();
-            callback(this.beat, this.phase, this.bpm);
+            callback(this.beat, this.phase, this.bpm, this.isPlayingWhenUpdate);
         }, interval_ms);
-        callback(this.beat, this.phase, this.bpm);
+        callback(this.beat, this.phase, this.bpm, this.isPlayingWhenUpdate);
     } else {
         this.timer = setInterval(() => {
             this.update();

@@ -17,7 +17,9 @@ NBIND_CLASS(AbletonLink) {
     getset(getQuantum, setQuantum);
 
     getset(getIsPlaying, setIsPlaying);
-
+    method(play);
+    method(stop);
+    
     method(getNumPeers);
 
     getset(getBpm, setBpm);
