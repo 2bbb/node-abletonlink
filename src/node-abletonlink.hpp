@@ -115,11 +115,12 @@ namespace bbb {
             link.commitAppSessionState(sessionState);
         }
         
-        bool isPlaying() const {
+        bool getIsPlaying() const {
             auto &&sessionState = link.captureAppSessionState();
             return sessionState.isPlaying();
         }
-        void setIsPlaying(bool isPlaying, std::chrono::microseconds time) {
+        void setIsPlaying(bool isPlaying) {
+            const auto &&time = link.clock().micros();
             auto &&sessionState = link.captureAppSessionState();
             sessionState.setIsPlaying(isPlaying, time);
         }
