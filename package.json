@@ -1,6 +1,6 @@
 {
   "name": "abletonlink",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "ableton link for node.js",
   "main": "index.js",
   "directories": {
@@ -17,12 +17,12 @@
     "type": "git",
     "url": "https://github.com/2bbb/node-abletonlink"
   },
-  "author": "",
+  "author": "2bit [i@2bit.jp]",
   "license": "MIT",
   "dependencies": {
     "autogypi": "^0.2.2",
-    "nbind": "^0.3.14",
-    "node-gyp": "^3.5.0"
+    "nbind": "^0.3.15",
+    "node-gyp": "^6.0.0"
   },
   "engines": {
     "node" : ">=6.0.0"
