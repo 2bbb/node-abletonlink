@@ -80,14 +80,19 @@ function do_something() {
 
 ## property
 
-* `beat`: `number`
-* `bpm`: `number`
-* `phase`: `number`
-* `quantum`: `number`
+* `isLinkEnable`: `bool` [get/set]
+* `isPlayStateSync`: `bool` [get/set]
+* `numPeers`: `number` [get]
+
+* `beat`: `number` [get/set]
+* `bpm`: `number` [get/set]
+* `phase`: `number` [get]
+* `quantum`: `number` [get/set]
 
 ## method
 
 * `getNumPeers`: `(void) -> number`
+[deprecated from v0.0.8. use `numPeers` property]
 
 get num peers.
 
@@ -99,9 +104,11 @@ set beat force.
 
 set callback will call change event.
 
-`key` is `'tempo'` then argument of callback is new `tempo`.
+`key` is `'tempo'` then argument of callback is new `tempo` property.
 
-`key` is `'numPeers'` then argument of callback is new `numPeers`.
+`key` is `'numPeers'` then argument of callback is new `numPeers` property.
+
+`key` is `'playState'` then argument of callback is new `isPlaying` property.
 
 * `off` : `(key: string) -> void`
 
@@ -110,15 +117,18 @@ remove callback.
 * `enable`: `(void) -> void`
 * `disable`: `(void) -> void`
 
+* `enablePlayStateSync`: `(void) -> void`
+* `disablePlayStateSync`: `(void) -> void`
+
 * `update`: `(void) -> void`
 
 call update manually.
 
-* `startUpdate`: `(interval: number [, callback: (beat:number, phase:number, bpm:number) -> void]) -> void`
+* `startUpdate`: `(interval: number [, callback: (beat:number, phase:number, bpm:number, playState: bool) -> void]) -> void`
 
 start update timer with interval.
 
-if given callback, it will call every interval with arguments `beat`, `phase`, `bpm`.
+if given callback, it will call every interval with arguments `beat`, `phase`, `bpm`, `playState`.
 
 * `stopUpdate`: `(void) -> void`
 
