@@ -144,7 +144,7 @@ namespace bbb {
             } else if(key == "numPeers") {
                 numPeersCallback = std::make_shared<nbind::cbFunction>(callback);
             } else if(key == "playState") {
-                playStateCalback = std::make_shared<nbind::cbFunction>(callback);
+                playStateCallback = std::make_shared<nbind::cbFunction>(callback);
             }
          }
 
@@ -154,7 +154,7 @@ namespace bbb {
             } else if(key == "numPeers") {
                 numPeersCallback.reset();
             } else if(key == "playState") {
-                playStateCalback.reset();
+                playStateCallback.reset();
             }
         }
         
@@ -173,7 +173,7 @@ namespace bbb {
         }
 
         void playStateChanged(bool isPlaying) {
-            if(playStateCalback) {
+            if(playStateCallback) {
                 Nan::HandleScope scope;
                 (*playStateCallback)(isPlaying);
             }
@@ -181,7 +181,7 @@ namespace bbb {
 
         std::shared_ptr<nbind::cbFunction> tempoCallback;
         std::shared_ptr<nbind::cbFunction> numPeersCallback;
-        std::shared_ptr<nbind::cbFunction> playStateCalback;
+        std::shared_ptr<nbind::cbFunction> playStateCallback;
 
         void update() {
             const auto &&time = link.clock().micros();
