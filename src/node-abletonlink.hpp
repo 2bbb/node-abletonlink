@@ -25,11 +25,16 @@ namespace bbb {
         AbletonLink *that;
         std::size_t numPeers;
     };
+    struct ALPlayingQueue {
+        AbletonLink *that;
+        bool isPlaying;
+    };
 
     static uv_async_t async;
     static std::mutex bbb_mutex;
     static std::queue<ALTempoQueue> bbb_tempo_queue;
     static std::queue<ALNumPeersQueue> bbb_peers_queue;
+    static std::queue<ALPlayingQueue> bbb_is_playing_queue;
     static void bbb_async_cb_handler(uv_async_t *handle);
 
     class AbletonLink {
@@ -69,6 +74,11 @@ namespace bbb {
                 bbb_peers_queue.push({this, num});
                 uv_async_send(&async);
             });
+            link.setStartStopCallback([this](bool isPlaying) {
+                std::lock_guard<std::mutex> lock(bbb_mutex);
+                bbb_is_playing_queue.push({this, isPlaying});
+                uv_async_send(&async);
+            });
         };
         explicit AbletonLink(const AbletonLink *other)
         : AbletonLink(other->bpm, other->quantum, other->getLinkEnable()) {}
@@ -81,32 +91,39 @@ namespace bbb {
         double getBeat() const { return beat; }
         void setBeat(double beat) {
             const auto time = link.clock().micros();
-            auto timeline = link.captureAppTimeline();
-            timeline.requestBeatAtTime(beat, time, quantum);
-            link.commitAppTimeline(timeline);
+            auto &&sessionState = link.captureAppSessionState();
+            sessionState.requestBeatAtTime(beat, time, quantum);
+            link.commitAppSessionState(sessionState);
         }
         void setBeatForce(double beat) {
-            const auto time = link.clock().micros();
-            auto timeline = link.captureAppTimeline();
-            timeline.forceBeatAtTime(beat, time, quantum);
-            link.commitAppTimeline(timeline);
+            const auto &&time = link.clock().micros();
+            auto &&sessionState = link.captureAppSessionState();
+            sessionState.forceBeatAtTime(beat, time, quantum);
+            link.commitAppSessionState(sessionState);
         }
         
         double getPhase() const { return phase; }
         void setPhase(double phase) {
-            // const auto time = link.clock().micros();
-            // auto timeline = link.captureAppTimeline();
         }
         
         double getBpm() const { return bpm; }
         void setBpm(double bpm) {
             this->bpm = bpm;
-            const auto time = link.clock().micros();
-            auto timeline = link.captureAppTimeline();
-            timeline.setTempo(bpm, time);
-            link.commitAppTimeline(timeline);
+            const auto &&time = link.clock().micros();
+            auto &&sessionState = link.captureAppSessionState();
+            sessionState.setTempo(bpm, time);
+            link.commitAppSessionState(sessionState);
         }
         
+        bool isPlaying() const {
+            auto &&sessionState = link.captureAppSessionState();
+            return sessionState.isPlaying();
+        }
+        void setIsPlaying(bool isPlaying, std::chrono::microseconds time) {
+            auto &&sessionState = link.captureAppSessionState();
+            sessionState.setIsPlaying(isPlaying, time);
+        }
+
         std::size_t getNumPeers() const { return link.numPeers(); }
         
         void setQuantum(double quantum) { this->quantum = quantum; }
@@ -118,23 +135,29 @@ namespace bbb {
         void onNumPeersChanged(nbind::cbFunction &callback) {
             on("numPeers", callback);
         }
+        void onPlayStateChanged(nbind::cbFunction &callback) {
+            on("playState", callback);
+        }
         void on(std::string key, nbind::cbFunction &callback) {
             if(key == "tempo") {
                 tempoCallback = std::make_shared<nbind::cbFunction>(callback);
             } else if(key == "numPeers") {
                 numPeersCallback = std::make_shared<nbind::cbFunction>(callback);
+            } else if(key == "playState") {
+                playStateCalback = std::make_shared<nbind::cbFunction>(callback);
             }
-        }
+         }
 
         void off(std::string key) {
             if(key == "tempo") {
                 tempoCallback.reset();
             } else if(key == "numPeers") {
                 numPeersCallback.reset();
+            } else if(key == "playState") {
+                playStateCalback.reset();
             }
         }
         
-    public:
         void tempoChanged(double tempo) {
             if(tempoCallback) {
                 Nan::HandleScope scope;
@@ -149,16 +172,24 @@ namespace bbb {
             }
         }
 
+        void playStateChanged(bool isPlaying) {
+            if(playStateCalback) {
+                Nan::HandleScope scope;
+                (*playStateCallback)(isPlaying);
+            }
+        }
+
         std::shared_ptr<nbind::cbFunction> tempoCallback;
         std::shared_ptr<nbind::cbFunction> numPeersCallback;
+        std::shared_ptr<nbind::cbFunction> playStateCalback;
 
         void update() {
-            const auto time = link.clock().micros();
-            auto timeline = link.captureAppTimeline();
+            const auto &&time = link.clock().micros();
+            auto &&sessionState = link.captureAppSessionState();
             
-            beat = timeline.beatAtTime(time, quantum);
-            phase = timeline.phaseAtTime(time, quantum);
-            bpm = timeline.tempo();
+            beat = sessionState.beatAtTime(time, quantum);
+            phase = sessionState.phaseAtTime(time, quantum);
+            bpm = sessionState.tempo();
         };
     };
 
@@ -173,6 +204,11 @@ namespace bbb {
             auto &front = bbb_peers_queue.front();
             front.that->numPeersChanged(front.numPeers);
             bbb_peers_queue.pop();
+        }
+        while(!bbb_is_playing_queue.empty()) {
+            auto &front = bbb_is_playing_queue.front();
+            front.that->playStateChanged(front.isPlaying);
+            bbb_is_playing_queue.pop();
         }
     }
 };
