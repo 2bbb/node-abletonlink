@@ -1,6 +1,6 @@
 {
   "name": "abletonlink",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "ableton link for node.js",
   "main": "index.js",
   "directories": {
@@ -25,6 +25,6 @@
     "node-gyp": "^6.0.0"
   },
   "engines": {
-    "node" : ">=6.0.0"
+    "node": ">=6.0.0"
   }
 }
