@@ -247,9 +247,9 @@ namespace bbb {
             ~scoped_session_state()
             {
                 if(is_audio_thread) {
-                    link.commitAppSessionState(sessionState);
-                } else {
                     link.commitAudioSessionState(sessionState);
+                } else {
+                    link.commitAppSessionState(sessionState);
                 }
             };
 
