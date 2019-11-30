@@ -148,7 +148,8 @@ MIT
 
 ## Special Thanks
 
-* [hlolli](https://github.com/hlolli)
+* [Hlöðver Sigurðsson (hlolli)](https://github.com/hlolli) [#3](https://github.com/2bbb/node-abletonlink/pull/3)
+* [Yuichi Yogo (yuichkun)](https://github.com/yuichkun) [#10](https://github.com/2bbb/node-abletonlink/pull/10)
 
 ## At last
 
