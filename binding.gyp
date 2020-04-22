@@ -1,19 +1,27 @@
 {
 	'targets': [{
-		"includes": [
-			"auto.gypi"
-		],
-		'target_name': 'nbind',
+		'target_name': 'abletonlink',
 		'sources': [
-			'src/nbind.cc'
+			'src/napi-abletonlink.cc',
 		],
 		'include_dirs': [
-			'./libs/link/include',
-			'./libs/link/modules/asio-standalone/asio/include'
+			'<!@(node -p \'require("node-addon-api").include\')',
+			'<(module_root_dir)/libs/link/include',
+			'<(module_root_dir)/libs/link/modules/asio-standalone/asio/include'
 		],
+		'cflags!': ['-fno-exceptions'],
+		'cflags_cc!': ['-fno-exceptions', '-std=c++11'],
+		'defines': ['NAPI_ENABLE_CPP_EXCEPTIONS'],
+		
 		'conditions': [
 			['OS=="mac"', {
-				'defines': ['LINK_PLATFORM_MACOSX=1']
+				'defines': ['LINK_PLATFORM_MACOSX=1'],
+				'xcode_settings': {
+					'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
+					'CLANG_CXX_LIBRARY': 'libc++',
+					'CLANG_CXX_LANGUAGE_STANDARD': 'c++11',
+					'MACOSX_DEPLOYMENT_TARGET': '10.10'
+				}
 			}],
 			['OS=="linux"', {
 				'defines': ['LINK_PLATFORM_LINUX=1']
@@ -24,7 +32,4 @@
 			}],
 		],
 	}],
-	"includes": [
-		"auto-top.gypi"
-	]
 }

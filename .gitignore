@@ -91,3 +91,5 @@ jspm_packages
 auto.gypi
 auto-top.gypi
 build/*
+.vscode/settings.json
+.python-version

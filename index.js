@@ -1,6 +1,8 @@
-const nbind = require('nbind');
-const binding = nbind.init(__dirname);
-const lib = binding.lib;
+// const nbind = require('nbind');
+// const binding = nbind.init(__dirname);
+// const lib = binding.lib;
+
+const lib = require("bindings")("abletonlink");
 
 lib.AbletonLink.prototype.startUpdate = function(interval_ms, callback) {
     this.update();

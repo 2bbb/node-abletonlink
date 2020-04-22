@@ -7,10 +7,7 @@
     "example": "./example"
   },
   "scripts": {
-    "node-gyp": "node-gyp",
-    "ndts": "ndts",
-    "install": "npm run build",
-    "build": "npm config set msvs_version 2015 && autogypi && node-gyp rebuild"
+    "node-gyp": "node-gyp"
   },
   "keywords": [],
   "repository": {
@@ -20,12 +17,12 @@
   "author": "2bit [i@2bit.jp]",
   "license": "MIT",
   "dependencies": {
-    "autogypi": "^0.2.2",
-    "nbind": "^0.3.15",
-    "node-gyp": "^6.0.0"
+    "bindings": "^1.5.0",
+    "node-addon-api": "^2.0.0"
   },
   "engines": {
     "node": ">=6.0.0"
   },
-  "types": "./index.d.ts"
+  "types": "./index.d.ts",
+  "gypfile": true
 }
