@@ -5,7 +5,7 @@
 			'src/napi-abletonlink.cc',
 		],
 		'include_dirs': [
-			'<!@(node -p \'require("node-addon-api").include\')',
+			"<!@(node -p \"require('node-addon-api').include\")",
 			'<(module_root_dir)/libs/link/include',
 			'<(module_root_dir)/libs/link/modules/asio-standalone/asio/include'
 		],
@@ -22,10 +22,10 @@
 				}
 			}],
 			['OS=="linux"', {
-				'defines': ['LINK_PLATFORM_LINUX=1']
+				'defines': ['LINK_PLATFORM_LINUX=1', 'NAPI_ENABLE_CPP_EXCEPTIONS']
 			}],
 			['OS=="win"', {
-				'defines': ['LINK_PLATFORM_WINDOWS=1', '_WIN32_WINNT=0x0501'],
+				'defines': ['LINK_PLATFORM_WINDOWS=1', '_WIN32_WINNT=0x0501','NAPI_DISABLE_CPP_EXCEPTIONS'],
 				'defines!': ['_HAS_EXCEPTIONS=0'],
 			}],
 		],
