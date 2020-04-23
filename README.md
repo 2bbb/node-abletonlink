@@ -1,6 +1,6 @@
 # node-abletonlink
 
-node.js port of [ableton Link](https://github.com/ableton/link) with [nbind](https://github.com/charto/nbind)
+node.js port of [ableton Link](https://github.com/ableton/link) with node-addon-api
 
 ## Dependencies
 
