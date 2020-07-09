@@ -11,7 +11,7 @@
 		],
 		'cflags_cc!': ['-std=c++11'],
 		'defines': ['NAPI_ENABLE_CPP_EXCEPTIONS'],
-		
+
 		'conditions': [
 			['OS=="mac"', {
 				'defines': ['LINK_PLATFORM_MACOSX=1'],
@@ -22,7 +22,8 @@
 				}
 			}],
 			['OS=="linux"', {
-				'defines': ['LINK_PLATFORM_LINUX=1', 'NAPI_ENABLE_CPP_EXCEPTIONS']
+				'defines': ['LINK_PLATFORM_LINUX=1'],
+				'cflags_cc': ['-fexceptions']
 			}],
 			['OS=="win"', {
 				'defines': ['LINK_PLATFORM_WINDOWS=1', '_WIN32_WINNT=0x0501','NAPI_DISABLE_CPP_EXCEPTIONS'],
