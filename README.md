@@ -36,13 +36,13 @@ see detail on [node-gyp](https://github.com/nodejs/node-gyp)
 ## Install
 
 ```
-npm install abletonlink --save
+npm install abletonlink
 ```
 
 or
 
 ```
-npm install 2bbb/node-abletonlink --save
+npm install 2bbb/node-abletonlink
 ```
 
 ## How to use
@@ -146,6 +146,7 @@ MIT
 * [Yuichi Yogo (yuichkun)](https://github.com/yuichkun) [#10](https://github.com/2bbb/node-abletonlink/pull/10)
 * [Jakob Miland](https://github.com/saebekassebil) [#11](https://github.com/2bbb/node-abletonlink/issues/11)
 * [Alessandro Oniarti](https://github.com/Onni97) [#11](https://github.com/2bbb/node-abletonlink/issues/11)
+* [Theis Bazin](https://github.com/tbazin) [#12](https://github.com/2bbb/node-abletonlink/pull/12)
 
 ## At last
 
