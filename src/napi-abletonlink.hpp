@@ -67,29 +67,31 @@ namespace napi {
         }
 
         static void callback_handler() {
-            std::lock_guard<std::mutex> sl(bbb_mutex());
-            while(!bbb_tempo_queue().empty()) {
-                auto &&front = bbb_tempo_queue().front();
-                bbb_tempo_queue().pop();
-                if(bbb_tempo_queue().empty()) {
-                    front.that->tempoChanged(front.bpm);
+            while (true) {
+                std::lock_guard<std::mutex> sl(bbb_mutex());
+                while(!bbb_tempo_queue().empty()) {
+                    auto &&front = bbb_tempo_queue().front();
+                    bbb_tempo_queue().pop();
+                    if(bbb_tempo_queue().empty()) {
+                        front.that->tempoChanged(front.bpm);
+                    }
                 }
-            }
-            while(!bbb_peers_queue().empty()) {
-                auto &&front = bbb_peers_queue().front();
-                bbb_peers_queue().pop();
-                if(bbb_peers_queue().empty()) {
-                    front.that->numPeersChanged(front.numPeers);
+                while(!bbb_peers_queue().empty()) {
+                    auto &&front = bbb_peers_queue().front();
+                    bbb_peers_queue().pop();
+                    if(bbb_peers_queue().empty()) {
+                        front.that->numPeersChanged(front.numPeers);
+                    }
                 }
-            }
-            while(!bbb_is_playing_queue().empty()) {
-                auto &&front = bbb_is_playing_queue().front();
-                bbb_is_playing_queue().pop();
-                if(bbb_is_playing_queue().empty()) {    
-                    front.that->playStateChanged(front.isPlaying);
+                while(!bbb_is_playing_queue().empty()) {
+                    auto &&front = bbb_is_playing_queue().front();
+                    bbb_is_playing_queue().pop();
+                    if(bbb_is_playing_queue().empty()) {    
+                        front.that->playStateChanged(front.isPlaying);
+                    }
                 }
-            }
-            std::this_thread::sleep_for( std::chrono::milliseconds(1) );
+                std::this_thread::sleep_for( std::chrono::milliseconds(1) );
+           }
         }
         static std::thread &callback_thread() {
             static std::thread th;
