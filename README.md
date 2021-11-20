@@ -147,7 +147,7 @@ MIT
 * [Jakob Miland](https://github.com/saebekassebil) [#11](https://github.com/2bbb/node-abletonlink/issues/11)
 * [Alessandro Oniarti](https://github.com/Onni97) [#11](https://github.com/2bbb/node-abletonlink/issues/11)
 * [Théis Bazin](https://github.com/tbazin) [#12](https://github.com/2bbb/node-abletonlink/pull/12), [#15](https://github.com/2bbb/node-abletonlink/pull/15)
-* [https://github.com/jeffreykog](https://github.com/jeffreykog) [#16](https://github.com/2bbb/node-abletonlink/issues/16)
+* [Jeffrey Kog](https://github.com/jeffreykog) [#16](https://github.com/2bbb/node-abletonlink/issues/16)
 
 ## At last
 
