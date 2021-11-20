@@ -24,5 +24,11 @@
     "node": ">=6.0.0"
   },
   "types": "./index.d.ts",
-  "gypfile": true
+  "gypfile": true,
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/2bbb"
+    }
+  ]
 }
