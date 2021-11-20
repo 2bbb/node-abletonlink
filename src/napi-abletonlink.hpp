@@ -224,6 +224,7 @@ namespace napi {
                     IM(getIsPlaying),
                     IM(setIsPlaying),
                     Property(isPlaying, getIsPlaying, setIsPlaying_),
+                    Getter(isPlayingOnUpdate, getIsPlayingOnUpdate),
                     IM(play),
                     IM(stop),
 
@@ -413,6 +414,9 @@ namespace napi {
             sessionState->setIsPlaying(isPlaying, time);
         }
 
+        ToValue<Napi::Boolean> getIsPlayingOnUpdate(const Napi::CallbackInfo &info) // const
+        { return toNapi(info, isPlayingWhenUpdate); };
+        
         void play(const Napi::CallbackInfo &info) {
             const auto &&time = get_time();
             auto &&sessionState = get_session_state();

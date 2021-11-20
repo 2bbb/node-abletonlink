@@ -9,9 +9,9 @@ lib.AbletonLink.prototype.startUpdate = function(interval_ms, callback) {
     if(callback) {
         this.timer = setInterval(() => {
             this.update();
-            callback(this.beat, this.phase, this.bpm, this.isPlayingWhenUpdate);
+            callback(this.beat, this.phase, this.bpm, this.isPlayingOnUpdate, this.numPeers);
         }, interval_ms);
-        callback(this.beat, this.phase, this.bpm, this.isPlayingWhenUpdate);
+        callback(this.beat, this.phase, this.bpm, this.isPlayingOnUpdate, this.numPeers);
     } else {
         this.timer = setInterval(() => {
             this.update();
@@ -31,9 +31,9 @@ lib.AbletonLinkAudio.prototype.startUpdate = function(interval_ms, callback) {
     if(callback) {
         this.timer = setInterval(() => {
             this.update();
-            callback(this.beat, this.phase, this.bpm, this.isPlayingWhenUpdate);
+            callback(this.beat, this.phase, this.bpm, this.isPlayingOnUpdate, this.numPeers);
         }, interval_ms);
-        callback(this.beat, this.phase, this.bpm, this.isPlayingWhenUpdate);
+        callback(this.beat, this.phase, this.bpm, this.isPlayingOnUpdate, this.numPeers);
     } else {
         this.timer = setInterval(() => {
             this.update();
