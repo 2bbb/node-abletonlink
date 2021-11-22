@@ -22,6 +22,10 @@ declare class AbletonLinkBase {
   getPhase(): number;
   readonly phase: number;
 
+  getBpm(): number;
+  setBpm(bpm: number): void;
+  bpm: number;
+
   getIsPlaying(): boolean;
   setIsPlaying(playing: boolean): void;
   isPlaying: boolean;
@@ -39,12 +43,12 @@ declare class AbletonLinkBase {
   onTempoChanged(cb: Function): void
   onNumPeersChanged(cb: Function): void
   onPlayStateChanged(cb: Function): void
+
   on(key: 'tempo', cb: (tempo: number) => any): void
   on(key: 'numPeers', cb: (num_peers: number) => any): void
   on(key: 'playState', cb: (play_state: boolean) => any): void
-  on(key: EventTypes, cb: Function): void
   off(key: EventTypes): void
-
+  
   update(): void
 
   // JavaScript
