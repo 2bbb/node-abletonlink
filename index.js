@@ -49,4 +49,5 @@ lib.AbletonLinkAudio.prototype.stopUpdate = function() {
 }
 
 lib.AbletonLink.Audio = lib.AbletonLinkAudio;
+lib.AbletonLink["default"] = lib.AbletonLink;
 module.exports = lib.AbletonLink;
