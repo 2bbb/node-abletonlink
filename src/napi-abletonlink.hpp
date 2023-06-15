@@ -206,7 +206,6 @@ namespace napi {
                     IM(getIsPlayStateSync),
                     IM(setIsPlayStateSync),
                     Property(isPlayStateSync, getIsPlayStateSync, setIsPlayStateSync_),
-                    Property(playState, getIsPlayStateSync, setIsPlayStateSync_),
                     IM(enablePlayStateSync),
                     IM(disablePlayStateSync),
 
@@ -227,6 +226,7 @@ namespace napi {
                     Property(isPlaying, getIsPlaying, setIsPlaying_),
                     IM(play),
                     IM(stop),
+                    Getter(isPlayingWhenUpdate, getIsPlayingWhenUpdate),
 
                     IM(getNumPeers),
                     Getter(numPeers, getNumPeers),
@@ -381,6 +381,9 @@ namespace napi {
         ToValue<Napi::Number> getBpm(const Napi::CallbackInfo &info) // const
         { return toNapi(info, bpm); }
 
+        ToValue<Napi::Boolean> getIsPlayingWhenUpdate(const Napi::CallbackInfo &info) // const
+        { return toNapi(info, isPlayingWhenUpdate); }
+
         void setBpm(const Napi::CallbackInfo &info) {
             double bpm = info[0].As<Napi::Number>();
             this->bpm = bpm;
@@ -501,7 +504,7 @@ namespace napi {
                     info.Env(), cb,
                     "playStateCallback",
                     0, 1, []( Napi::Env ) {});
-                has_tempoCallback = true;
+                has_playStateCallback = true;
             }
          }
 
@@ -534,12 +537,13 @@ namespace napi {
 
         void update(const Napi::CallbackInfo &info) {
             const auto &&time = link.clock().micros();
-            auto &&sessionState = link.captureAppSessionState();
+            // auto &&sessionState = link.captureAppSessionState();
+            auto &&sessionState = get_session_state();
             
-            beat = sessionState.beatAtTime(time, quantum);
-            phase = sessionState.phaseAtTime(time, quantum);
-            bpm = sessionState.tempo();
-            isPlayingWhenUpdate = sessionState.isPlaying();
+            beat = sessionState->beatAtTime(time, quantum);
+            phase = sessionState->phaseAtTime(time, quantum);
+            bpm = sessionState->tempo();
+            isPlayingWhenUpdate = sessionState->isPlaying();
         };
     };
 };
