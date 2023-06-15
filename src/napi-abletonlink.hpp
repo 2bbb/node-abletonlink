@@ -206,6 +206,7 @@ namespace napi {
                     IM(getIsPlayStateSync),
                     IM(setIsPlayStateSync),
                     Property(isPlayStateSync, getIsPlayStateSync, setIsPlayStateSync_),
+                    Property(playState, getIsPlayStateSync, setIsPlayStateSync_),
                     IM(enablePlayStateSync),
                     IM(disablePlayStateSync),
 
